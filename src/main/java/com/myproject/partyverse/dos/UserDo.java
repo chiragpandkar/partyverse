@@ -7,16 +7,16 @@ import java.sql.Timestamp;
 @Data
 public class UserDo {
 
+    private Boolean isActive;
     private Integer id;
+    private String status;
     private String name;
     private String username;
     private String password;
     private String email;
-    private String profileAvatar;
+    private Integer profileAvatar;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    private String status;
-    private boolean isActive;
 
 }
 

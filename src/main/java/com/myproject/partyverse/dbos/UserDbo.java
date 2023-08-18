@@ -18,34 +18,32 @@ import java.util.List;
 public class UserDbo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "email")
+    @Column(name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean isActive;
+
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "profile_avatar")
-    private String profileAvatar;
-
-    @Column(name = "created_at")
-    private Timestamp createdAt;
-
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
-
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "is_active")
-    private boolean isActive;
-
-    @Column(name = "username", length = 255)
+    @Column(name = "username", length = 255, unique = true, nullable = false)
     private String username;
 
-    private List<PartiesDbo> parties;
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "profile_avatar")
+    private Integer profileAvatar;
+
+    @Column(name = "created_at", columnDefinition = "timestamp DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at", columnDefinition = "timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Timestamp updatedAt;
 
 }
