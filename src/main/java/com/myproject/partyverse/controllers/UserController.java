@@ -6,15 +6,21 @@ import com.myproject.partyverse.http.HttpResponseCodes;
 import com.myproject.partyverse.http.HttpResponseDo;
 import com.myproject.partyverse.http.HttpResponseMessages;
 import com.myproject.partyverse.services.UserService;
+import com.myproject.partyverse.utils.StringUtils;
 import com.myproject.partyverse.validator.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+  private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @Autowired
   private UserService userService;
@@ -28,6 +34,7 @@ public class UserController {
       if (e instanceof ValidRequestBodyException) {
         return ResponseEntity.ok(((ValidRequestBodyException) e).getValidationError());
       }
+      logger.error("Exception occurred {}", StringUtils.printStackTrace(e));
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
         HttpResponseMessages.SOMETHING_WENT_WRONG));
     }
@@ -43,16 +50,18 @@ public class UserController {
       if(e instanceof ValidRequestBodyException){
         return ResponseEntity.ok(((ValidRequestBodyException) e).getValidationError());
       }
+      logger.error("Exception occurred {}", StringUtils.printStackTrace(e));
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
               HttpResponseMessages.SOMETHING_WENT_WRONG));
     }
   }
 
   @GetMapping("/search")
-  public ResponseEntity<?> search(@RequestParam String query){
+  public ResponseEntity<?> search(@RequestParam String username){
     try{
-      return userService.search(query);
+      return userService.search(username);
     } catch(Exception e){
+        logger.error("Exception occurred {}", StringUtils.printStackTrace(e));
         return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
                 HttpResponseMessages.SOMETHING_WENT_WRONG));
     }
@@ -66,6 +75,7 @@ public class UserController {
       ResponseEntity<?> profileDetails = userService.get(userId);
       return ResponseEntity.ok(profileDetails);
     } catch (Exception e){
+        logger.error("Exception occurred {}", StringUtils.printStackTrace(e));
         return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
                 HttpResponseMessages.SOMETHING_WENT_WRONG));
     }

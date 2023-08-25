@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class UserDo {
 
     private Boolean isActive;
-    private Integer id;
+    private Long id;
     private String status;
     private String name;
     private String username;

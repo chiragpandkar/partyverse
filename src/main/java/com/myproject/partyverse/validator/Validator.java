@@ -72,6 +72,8 @@ public class Validator {
   }
 
   public static void validateId(Long userId) {
-
+    if(!ValidationUtils.isValidId(userId)){
+      throw new ValidRequestBodyException(HttpResponseDo.error(HttpResponseCodes.INVALID_ID, HttpResponseMessages.INVALID_ID));
+    }
   }
 }

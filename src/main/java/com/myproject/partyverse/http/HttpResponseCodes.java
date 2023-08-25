@@ -13,4 +13,6 @@ public class HttpResponseCodes {
   public static final Integer USER_ALREADY_EXISTS = 10009;
   public static final Integer USER_DOES_NOT_EXISTS = 100010;
   public static final Integer SUCCESSFUL_LOGIN = 100011;
+  public static final Integer INVALID_ID = 100012;
+  public static final Integer INCORRECT_PASSWORD = 100013;
 }

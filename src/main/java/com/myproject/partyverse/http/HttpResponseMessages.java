@@ -22,4 +22,6 @@ public class HttpResponseMessages {
   public static final Object SUCCESSFUL_REGISTRATION = "User Registration Successful.";
     public static final String USER_DOES_NOT_EXISTS = "User Does Not exists";
   public static final String SUCCESSFUL_LOGIN = "User Login Successful.";
+  public static final String INVALID_ID = "User ID Invalid";
+  public static final String INCORRECT_PASSWORD = "Password is incorrect!";
 }

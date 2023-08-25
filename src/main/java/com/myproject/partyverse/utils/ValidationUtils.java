@@ -12,4 +12,8 @@ public class ValidationUtils {
     }
     return Pattern.matches(EMAIL_REGEX, email);
   }
+
+  public static boolean isValidId(Long id){
+    return id != null && id > 0;
+  }
 }

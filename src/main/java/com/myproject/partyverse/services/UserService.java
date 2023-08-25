@@ -55,12 +55,12 @@ public class UserService {
                   HttpResponseMessages.USER_DOES_NOT_EXISTS));
         }
         if(!userDbo.getPassword().equals(userDo.getPassword())){
-          return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.INVALID_PASSWORD,
-                  HttpResponseMessages.INVALID_PASSWORD));
+          return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.INCORRECT_PASSWORD,
+                  HttpResponseMessages.INCORRECT_PASSWORD));
         }
 
         String token = tokenService.generateToken(userDbo.getId());
-        return ResponseEntity.ok(HttpResponseDo.success(Converter.convertToSignInSuccessDO(token, userDbo)));
+        return ResponseEntity.ok(HttpResponseDo.success(Converter.convertToLoginSuccessDo(token, userDbo)));
     } catch (Exception e){
       logger.error("Exception Occurred {}", StringUtils.printStackTrace(e));
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
