@@ -8,15 +8,15 @@ import com.myproject.partyverse.http.HttpResponseDo;
 import com.myproject.partyverse.http.HttpResponseMessages;
 import com.myproject.partyverse.repository.UserRepository;
 import com.myproject.partyverse.utils.StringUtils;
+import jakarta.persistence.Convert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -26,6 +26,9 @@ public class UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private TokenService tokenService;
 
   public ResponseEntity<?> register(UserDo userDo) {
     try {
@@ -51,15 +54,13 @@ public class UserService {
           return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.USER_DOES_NOT_EXISTS,
                   HttpResponseMessages.USER_DOES_NOT_EXISTS));
         }
-
         if(!userDbo.getPassword().equals(userDo.getPassword())){
           return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.INVALID_PASSWORD,
                   HttpResponseMessages.INVALID_PASSWORD));
         }
 
-        String token = tokenService.generateJwtToken(userDbo);
-        return ResponseEntity.ok(HttpResponseDo.success(token));
-
+        String token = tokenService.generateToken(userDbo.getId());
+        return ResponseEntity.ok(HttpResponseDo.success(Converter.convertToSignInSuccessDO(token, userDbo)));
     } catch (Exception e){
       logger.error("Exception Occurred {}", StringUtils.printStackTrace(e));
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
@@ -67,14 +68,10 @@ public class UserService {
     }
   }
 
-  public static ResponseEntity<?> search(String query) {
+  public ResponseEntity<?> search(String username) {
     try{
-      List<UserDbo> searchResults = UserRepository.findByUsernameContainingIgnoreCaseOrNameContainingIgnoreCase(query, query);
-      List<String> userNames = new ArrayList<>();
-      for (UserDbo userDbo : searchResults){
-        userNames.add(userDbo.getName());
-      }
-      return ResponseEntity.ok(HttpResponseDo.success(userNames));
+      List<UserDbo> searchResults = userRepository.findByUsernameStartingWith(username);
+      return ResponseEntity.ok(HttpResponseDo.success(searchResults));
     } catch(Exception e){
       logger.error("Exception Occurred {}", StringUtils.printStackTrace(e));
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
@@ -83,15 +80,14 @@ public class UserService {
   }
 
 
-  public ResponseEntity<?> getProfile(String username) {
-    UserDbo userDbo = userRepository.findByUsername(username);
+  public ResponseEntity<?> get(Long userId) {
+    Optional<UserDbo> userDbo = userRepository.findById(userId);
     try{
-      if (userDbo == null){
+      if (userDbo.isEmpty()){
         return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.USER_DOES_NOT_EXISTS,
                 HttpResponseMessages.USER_DOES_NOT_EXISTS));
       }
-      List<String> profileDetails = Arrays.asList(userDbo.getName(), userDbo.getUsername(), userDbo.getEmail(), String.valueOf(userDbo.getId()));
-      return ResponseEntity.ok(HttpResponseDo.success(profileDetails));
+      return ResponseEntity.ok(HttpResponseDo.success(Converter.convertToUserDo(userDbo.get())));
     } catch (Exception e){
         logger.error("Exception occurred {}",StringUtils.printStackTrace(e));
         return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,

@@ -70,4 +70,8 @@ public class Validator {
       throw new ValidRequestBodyException(HttpResponseDo.error(HttpResponseCodes.INVALID_PASSWORD, HttpResponseMessages.INVALID_PASSWORD));
     }
   }
+
+  public static void validateId(Long userId) {
+
+  }
 }

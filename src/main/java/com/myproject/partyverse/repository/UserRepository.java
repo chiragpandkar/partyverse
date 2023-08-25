@@ -10,12 +10,5 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<UserDbo, Long> {
 
   UserDbo findByEmailOrUsername(String email, String username);
-
-  static List<UserDbo> findByUsernameContainingIgnoreCaseOrNameContainingIgnoreCase(String usernameQuery, String nameQuery) {
-    return null;
-  }
-
-  List<UserDbo> findByUsernameContainingIgnoreCase(String query);
-
-  UserDbo findByUsername(String username);
+  List<UserDbo> findByUsernameStartingWith(String query);
 }
