@@ -11,4 +11,6 @@ public class HttpResponseCodes {
   public static final Integer INVALID_USERNAME = 10007;
   public static final Integer NULL_PROFILE_AVATAR = 10008;
   public static final Integer USER_ALREADY_EXISTS = 10009;
+  public static final Integer USER_DOES_NOT_EXISTS = 100010;
+  public static final Integer SUCCESSFUL_LOGIN = 100011;
 }

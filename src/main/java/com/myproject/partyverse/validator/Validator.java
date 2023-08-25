@@ -24,6 +24,15 @@ public class Validator {
     // todo user can have empty avatar also validateProfileAvatar(userDo.getProfileAvatar());
   }
 
+  public static void loginUserRequest(UserDo userDo) {
+    if(userDo == null){
+      throw new ValidRequestBodyException(HttpResponseDo.error(HttpResponseCodes.NULL_USER_DO, HttpResponseMessages.NULL_USER_DO));
+    }
+    validateEmail(userDo.getEmail());
+    validateUsername(userDo.getUsername());
+    validatePassword(userDo.getPassword());
+  }
+
   private static void validateProfileAvatar(Integer profileAvatar){
     if (profileAvatar == null) {
       throw new ValidRequestBodyException(

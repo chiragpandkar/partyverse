@@ -20,4 +20,6 @@ public class HttpResponseMessages {
   public static final String NULL_PROFILE_AVATAR = "Profile avatar is empty";
   public static final String USER_ALREADY_EXISTS = "Email Or Username Already Exists.";
   public static final Object SUCCESSFUL_REGISTRATION = "User Registration Successful.";
+    public static final String USER_DOES_NOT_EXISTS = "User Does Not exists";
+  public static final String SUCCESSFUL_LOGIN = "User Login Successful.";
 }

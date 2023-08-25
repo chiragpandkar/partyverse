@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 @Service
 public class UserService {
@@ -38,5 +42,61 @@ public class UserService {
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
         HttpResponseMessages.SOMETHING_WENT_WRONG));
     }
+  }
+
+  public ResponseEntity<?> login(UserDo userDo) {
+    try{
+        UserDbo userDbo = userRepository.findByEmailOrUsername(userDo.getEmail(), userDo.getUsername());
+        if(userDbo == null){
+          return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.USER_DOES_NOT_EXISTS,
+                  HttpResponseMessages.USER_DOES_NOT_EXISTS));
+        }
+
+        if(!userDbo.getPassword().equals(userDo.getPassword())){
+          return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.INVALID_PASSWORD,
+                  HttpResponseMessages.INVALID_PASSWORD));
+        }
+
+        String token = tokenService.generateJwtToken(userDbo);
+        return ResponseEntity.ok(HttpResponseDo.success(token));
+
+    } catch (Exception e){
+      logger.error("Exception Occurred {}", StringUtils.printStackTrace(e));
+      return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
+              HttpResponseMessages.SOMETHING_WENT_WRONG));
+    }
+  }
+
+  public static ResponseEntity<?> search(String query) {
+    try{
+      List<UserDbo> searchResults = UserRepository.findByUsernameContainingIgnoreCaseOrNameContainingIgnoreCase(query, query);
+      List<String> userNames = new ArrayList<>();
+      for (UserDbo userDbo : searchResults){
+        userNames.add(userDbo.getName());
+      }
+      return ResponseEntity.ok(HttpResponseDo.success(userNames));
+    } catch(Exception e){
+      logger.error("Exception Occurred {}", StringUtils.printStackTrace(e));
+      return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
+              HttpResponseMessages.SOMETHING_WENT_WRONG));
+    }
+  }
+
+
+  public ResponseEntity<?> getProfile(String username) {
+    UserDbo userDbo = userRepository.findByUsername(username);
+    try{
+      if (userDbo == null){
+        return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.USER_DOES_NOT_EXISTS,
+                HttpResponseMessages.USER_DOES_NOT_EXISTS));
+      }
+      List<String> profileDetails = Arrays.asList(userDbo.getName(), userDbo.getUsername(), userDbo.getEmail(), String.valueOf(userDbo.getId()));
+      return ResponseEntity.ok(HttpResponseDo.success(profileDetails));
+    } catch (Exception e){
+        logger.error("Exception occurred {}",StringUtils.printStackTrace(e));
+        return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
+                HttpResponseMessages.SOMETHING_WENT_WRONG));
+    }
+
   }
 }

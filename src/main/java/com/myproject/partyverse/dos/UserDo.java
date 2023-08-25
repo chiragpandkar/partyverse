@@ -18,5 +18,6 @@ public class UserDo {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+
 }
 
