@@ -7,13 +7,12 @@ import java.sql.Timestamp;
 @Data
 public class UserDo {
 
-    private Boolean isActive;
     private Long id;
-    private String status;
-    private String name;
+    private Boolean isActive;
     private String username;
     private String password;
     private String email;
+    private String name;
     private Integer profileAvatar;
     private Timestamp createdAt;
     private Timestamp updatedAt;

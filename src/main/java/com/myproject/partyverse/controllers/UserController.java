@@ -31,10 +31,10 @@ public class UserController {
       Validator.registerUserRequest(userDo);
       return userService.register(userDo);
     } catch (Exception e) {
+      logger.error("Exception occurred {}", StringUtils.printStackTrace(e));
       if (e instanceof ValidRequestBodyException) {
         return ResponseEntity.ok(((ValidRequestBodyException) e).getValidationError());
       }
-      logger.error("Exception occurred {}", StringUtils.printStackTrace(e));
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
         HttpResponseMessages.SOMETHING_WENT_WRONG));
     }
@@ -47,10 +47,10 @@ public class UserController {
       Validator.loginUserRequest(userDo);
       return userService.login(userDo);
     } catch (Exception e){
+      logger.error("Exception occurred {}", StringUtils.printStackTrace(e));
       if(e instanceof ValidRequestBodyException){
         return ResponseEntity.ok(((ValidRequestBodyException) e).getValidationError());
       }
-      logger.error("Exception occurred {}", StringUtils.printStackTrace(e));
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
               HttpResponseMessages.SOMETHING_WENT_WRONG));
     }

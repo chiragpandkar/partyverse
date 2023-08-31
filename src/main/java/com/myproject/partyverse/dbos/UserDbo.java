@@ -17,6 +17,7 @@ import java.util.List;
 @Table(name = "user")
 public class UserDbo {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
@@ -27,6 +28,7 @@ public class UserDbo {
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
+
 
     @Column(name = "username", length = 255, unique = true, nullable = false)
     private String username;

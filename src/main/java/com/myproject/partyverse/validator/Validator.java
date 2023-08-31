@@ -16,7 +16,8 @@ public class Validator {
   public static void registerUserRequest(UserDo userDo) {
     if (userDo == null){
       throw new ValidRequestBodyException(HttpResponseDo.error(HttpResponseCodes.NULL_USER_DO, HttpResponseMessages.NULL_USER_DO));
-    }
+}
+
     validateEmail(userDo.getEmail());
     validatePassword(userDo.getPassword());
     validateName(userDo.getName());

@@ -32,6 +32,7 @@ public class UserService {
 
   public ResponseEntity<?> register(UserDo userDo) {
     try {
+
       UserDbo exists = userRepository.findByEmailOrUsername(userDo.getEmail(),
         userDo.getUsername());
       if (exists != null) {
@@ -61,6 +62,7 @@ public class UserService {
 
         String token = tokenService.generateToken(userDbo.getId());
         return ResponseEntity.ok(HttpResponseDo.success(Converter.convertToLoginSuccessDo(token, userDbo)));
+
     } catch (Exception e){
       logger.error("Exception Occurred {}", StringUtils.printStackTrace(e));
       return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
@@ -88,6 +90,7 @@ public class UserService {
                 HttpResponseMessages.USER_DOES_NOT_EXISTS));
       }
       return ResponseEntity.ok(HttpResponseDo.success(Converter.convertToUserDo(userDbo.get())));
+
     } catch (Exception e){
         logger.error("Exception occurred {}",StringUtils.printStackTrace(e));
         return ResponseEntity.ok(HttpResponseDo.error(HttpResponseCodes.SOMETHING_WENT_WRONG,
